@@ -104,4 +104,25 @@ def main():
 
     metrik_test = {
         "accuracy": float(accuracy_score(y_test, y_pred)),
+        "precision": float(precision_score(y_test, y_pred)),
+        "recall": float(recall_score(y_test, y_pred)),
+        "f1": float(f1_score(y_test, y_pred)),
+        "roc_auc": float(roc_auc_score(y_test, y_prob)),
+        "confusion_matrix": cm.tolist(),
+    }
+
+    print("=== 3. EVALUASI FINAL DATA TEST (1 KALI EKSEKUSI) ===")
+    for k, v in metrik_test.items():
+        if k != "confusion_matrix":
+            print(f"{k.upper():10s}: {v:.4f}")
+    print("\nConfusion Matrix:\n", cm)
+    print("\nClassification Report:\n", classification_report(y_test, y_pred, target_names=["Jinak", "Ganas"]))
+
+    tahap_fe = pipeline_terbaik.named_steps["fe"]
+    paket_deploy = {
+        "pipeline": pipeline_terbaik,
+        "nama_model": model_terbaik_nama,
+        "fitur_mentah": X.columns.tolist(),
+        "nilai_median_default": X_train.median().to_dict(),
+        "kolom_dibuang_korelasi": tahap_fe.kolom_dibuang_,
         
