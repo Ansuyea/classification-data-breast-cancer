@@ -4,7 +4,6 @@ from sklearn.base import BaseEstimator, TransformerMixin
 
 
 def audit_data(df: pd.DataFrame) -> None:
-    """Melakukan audit awal dataset: ukuran, duplikat, missing value, dan nilai tidak wajar."""
     print("=== 1. HASIL AUDIT DATA ===")
     print(f"Ukuran dataset       : {df.shape[0]} baris, {df.shape[1]} kolom")
     print(f"Jumlah baris duplikat: {df.duplicated().sum()}")
@@ -25,7 +24,6 @@ def audit_data(df: pd.DataFrame) -> None:
 
 
 def encode_target(y: pd.Series) -> np.ndarray:
-    """Mengubah label target menjadi angka biner: Ganas = 1 (kelas positif), Jinak = 0."""
     peta_label = {
         "ganas": 1, "m": 1, "malignant": 1, "1": 1,
         "jinak": 0, "b": 0, "benign": 0, "0": 0,
@@ -37,12 +35,6 @@ def encode_target(y: pd.Series) -> np.ndarray:
 
 
 class RekayasaFiturKanker(BaseEstimator, TransformerMixin):
-    """
-    Transformer scikit-learn untuk:
-    1. Membuat 3 fitur rasio baru yang menggambarkan heterogenitas ukuran & tekstur sel.
-    2. Menyeleksi fitur dengan membuang multikolinearitas tinggi (|r| > corr_threshold)
-       yang dihitung HANYA pada data train saat fit().
-    """
 
     def __init__(self, corr_threshold: float = 0.92):
         self.corr_threshold = corr_threshold

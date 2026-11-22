@@ -31,7 +31,6 @@ def main():
             f"File {path_dataset} tidak ditemukan. Letakkan kasus02_breast_cancer.csv di folder dataset/."
         )
 
-    # 1. Muat & Audit Data
     df = pd.read_csv(path_dataset)
     audit_data(df)
     df = df.drop_duplicates().reset_index(drop=True)
@@ -46,7 +45,6 @@ def main():
     X = df.drop(columns=["diagnosis"])
     y = encode_target(df["diagnosis"])
 
-    # 2. Pembagian Data Train & Test
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.20, random_state=42, stratify=y
     )
@@ -54,7 +52,6 @@ def main():
     print(f"Data Train: {len(X_train)} sampel | Data Test: {len(X_test)} sampel")
     print(f"Rasio scale_pos_weight XGBoost (dari data train): {rasio_kelas_train:.4f}\n")
 
-    # 3. Perbandingan 2 Algoritma dalam Pipeline scikit-learn (Saya memilih Logistic Regression dan Gradient Boosting)
     daftar_pipeline = {
         "Logistic Regression": Pipeline([
             ("fe", RekayasaFiturKanker(corr_threshold=0.92)),
@@ -79,7 +76,6 @@ def main():
         ]),
     }
 
-    # 4. Pemilihan Model dengan 5-Fold Cross-Validation pada Data Train
     cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
     daftar_metrik = ["accuracy", "precision", "recall", "f1", "roc_auc"]
     hasil_cv = {}
@@ -101,7 +97,6 @@ def main():
     pipeline_terbaik = daftar_pipeline[model_terbaik_nama]
     print(f"\nModel Terbaik Terpilih (Prioritas Recall Medis): {model_terbaik_nama}\n")
 
-    # 5. Evaluasi SATU KALI pada Data Test
     pipeline_terbaik.fit(X_train, y_train)
     y_pred = pipeline_terbaik.predict(X_test)
     y_prob = pipeline_terbaik.predict_proba(X_test)[:, 1]
@@ -109,35 +104,4 @@ def main():
 
     metrik_test = {
         "accuracy": float(accuracy_score(y_test, y_pred)),
-        "precision": float(precision_score(y_test, y_pred)),
-        "recall": float(recall_score(y_test, y_pred)),
-        "f1": float(f1_score(y_test, y_pred)),
-        "roc_auc": float(roc_auc_score(y_test, y_prob)),
-        "confusion_matrix": cm.tolist(),
-    }
-
-    print("=== 3. EVALUASI FINAL DATA TEST (1 KALI EKSEKUSI) ===")
-    for k, v in metrik_test.items():
-        if k != "confusion_matrix":
-            print(f"{k.upper():10s}: {v:.4f}")
-    print("\nConfusion Matrix:\n", cm)
-    print("\nClassification Report:\n", classification_report(y_test, y_pred, target_names=["Jinak", "Ganas"]))
-
-    # 6. Simpan Pipeline Lengkap + Metadata dengan joblib
-    tahap_fe = pipeline_terbaik.named_steps["fe"]
-    paket_deploy = {
-        "pipeline": pipeline_terbaik,
-        "nama_model": model_terbaik_nama,
-        "fitur_mentah": X.columns.tolist(),
-        "nilai_median_default": X_train.median().to_dict(),
-        "kolom_dibuang_korelasi": tahap_fe.kolom_dibuang_,
-        "fitur_terpilih": tahap_fe.fitur_terpilih_,
-        "hasil_cv": hasil_cv,
-        "metrik_test": metrik_test,
-    }
-    joblib.dump(paket_deploy, path_output_model)
-    print(f"=== 4. DEPLOY JOBLIB SUKSES: {path_output_model} ===")
-
-
-if __name__ == "__main__":
-    main()
+        
