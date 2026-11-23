@@ -13,7 +13,7 @@ def muat_model():
     if not PATH_MODEL.exists():
         return None
     return joblib.load(PATH_MODEL)
-
+    
 
 def main():
     st.title(" Prediksi Diagnosis Kanker Payudara")
