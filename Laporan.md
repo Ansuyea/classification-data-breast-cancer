@@ -75,16 +75,16 @@ Saya memilih pendekatan Seleksi Fitur Berbasis Korelasi (Filter Method) dengan a
   Teknik reduksi dimensi seperti PCA akan mentransformasikan fitur-fitur fisik (radius, area, tekstur) menjadi komponen utama (PC1, PC2, dst.)
   yang abstrak dan tidak lagi memiliki arti klinis langsung. Dokter tidak bisa menjelaskan secara logis mengapa model mengambil keputusan tersebut.
 * Keuntungan Seleksi Fitur: Dengan mendeteksi pasangan fitur berkorelasi tinggi (misalnya `perimeter_mean` dan `radius_mean`) lalu membuang salah satunya,
-  kita berhasil menghilangkan multikolinearitas ekstrem (menyisakan fitur independen) tetapi **tetap mempertahankan interpretabilitas fisik** dari fitur asli yang tersisa.
+  kita berhasil menghilangkan multikolinearitas ekstrem (menyisakan fitur independen) tetapi tetap mempertahankan interpretabilitas fisik dari fitur asli yang tersisa.
 
 ### Pertanyaan 2: Pada konteks medis, kesalahan jenis apa yang lebih mahal? Pilih metrik utama dan jelaskan alasannya!
 
 **Jawaban:**
-* **Kesalahan yang Lebih Mahal:** Kesalahan **False Negative (FN)** jauh lebih mahal dan fatal secara medis.
+* Kesalahan yang Lebih Mahal: Kesalahan **False Negative (FN)** jauh lebih mahal dan fatal secara medis.
   * *False Negative* terjadi ketika seorang pasien yang sebenarnya memiliki kanker **Ganas (Malignant)** salah diprediksi oleh model sebagai **Jinak (Benign)**.
-  * **Dampak Fatal:** Pasien tidak akan mendapatkan tindakan medis, kemoterapi, atau operasi segera, sehingga sel kanker akan terus menyebar secara senyap dan dapat berujung pada kematian.
+  * Dampak Fatal: Pasien tidak akan mendapatkan tindakan medis, kemoterapi, atau operasi segera, sehingga sel kanker akan terus menyebar secara senyap dan dapat berujung pada kematian.
   * Sebaliknya, *False Positive* (pasien jinak diprediksi ganas) hanya akan menyebabkan kecemasan sementara dan dapat dikoreksi melalui biopsi atau tes sekunder lanjutan.
-* **Pemilihan Metrik Utama:** Berdasarkan kondisi di atas, metrik utama yang digunakan adalah **Recall (Sensitivity)**.
+* Pemilihan Metrik Utama: Berdasarkan kondisi di atas, metrik utama yang digunakan adalah **Recall (Sensitivity)**.
   $$\text{Recall} = \frac{\text{True Positive (TP)}}{\text{True Positive (TP)} + \text{False Negative (FN)}}$$
   Fokus utama model adalah memperkecil nilai penyebut bagian *False Negative (FN)* hingga mendekati nol, guna menjamin tidak ada pasien kanker ganas yang lolos dari deteksi.
 
@@ -93,6 +93,6 @@ Saya memilih pendekatan Seleksi Fitur Berbasis Korelasi (Filter Method) dengan a
 ## 5. INTERPRETASI KLINIS DAN KESIMPULAN
 1. Model **Logistic Regression** yang dikombinasikan dengan kustomisasi kelas penyeimbang (`class_weight="balanced"`) berhasil mencapai keseimbangan performa yang sangat luar biasa dengan
    **ROC-AUC sebesar 0.9970** pada data uji.
-3. Dari 42 kasus kanker ganas pada data uji, model berhasil mendeteksi **39 pasien dengan benar (Recall 92.86%)** dan hanya melewatkan 3 pasien.
+3. Dari 42 kasus kanker ganas pada data uji, model berhasil mendeteksi 39 pasien dengan benar (Recall 92.86%) dan hanya melewatkan 3 pasien.
 4. Model ini berarti layak diintegrasikan ke dalam sistem penunjang keputusan klinis (*Clinical Decision Support System*) karena proses prapemrosesan datanya yang bersih,
    aman dari kebocoran data (*data leakage*), serta menghasilkan keputusan klasifikasi yang transparan dan dapat dipahami secara medis.
