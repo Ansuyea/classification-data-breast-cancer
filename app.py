@@ -1,9 +1,10 @@
+%%writefile app.py
 from pathlib import Path
 import joblib
 import pandas as pd
 import streamlit as st
 
-st.set_page_config(page_title="Diagnosis Kanker Payudara - Kasus 2", page_icon="ን", layout="wide")
+st.set_page_config(page_title="Diagnosis Kanker Payudara - Kasus 2", layout="wide")
 PATH_MODEL = Path("models/model_kasus02.joblib")
 
 
@@ -15,7 +16,7 @@ def muat_model():
 
 
 def main():
-    st.title("ን Prediksi Diagnosis Kanker Payudara")
+    st.title(" Prediksi Diagnosis Kanker Payudara")
     st.caption("UTS Intelegensi Buatan — Kasus 2 (NIM: 24552011020)")
 
     paket = muat_model()
@@ -30,7 +31,7 @@ def main():
     hasil_cv = paket["hasil_cv"]
 
     with st.sidebar:
-        st.header("ኃ Metrik Evaluasi Model")
+        st.header("Metrik Evaluasi Model")
         st.write(f"**Algoritma Terpilih:** {paket['nama_model']}")
         st.write(f"**Fitur Mentah → Akhir:** {len(fitur_mentah)} → {len(paket['fitur_terpilih'])} fitur")
 
@@ -53,18 +54,18 @@ def main():
                 )
             )
 
-    tab_manual, tab_csv = st.tabs(["ጁ Input Manual (30 Fitur Mentah)", "ሡ Unggah File CSV"])
+    tab_manual, tab_csv = st.tabs(["Input Manual (30 Fitur Mentah)", "Unggah File CSV"])
 
     with tab_manual:
         st.info("Nilai awal diisi otomatis dengan nilai median data train. Ubah angka sesuai hasil lab pasien.")
         with st.form("form_input_mentah"):
-            t_mean, t_err, t_worst = st.tabs(["Rata-rata (mean_*)", "Galat (*_error)", "Terburuk (worst_*)"])
+            t_mean, t_err, t_worst = st.tabs(["Rata-rata (mean)", "Galat (error)", "Terburuk (worst)"])
             input_user = {}
 
             kelompok_fitur = [
-                (t_mean, [f for f in fitur_mentah if f.startswith("mean_")]),
-                (t_err, [f for f in fitur_mentah if f.endswith("_error")]),
-                (t_worst, [f for f in fitur_mentah if f.startswith("worst_")]),
+                (t_mean, [f for f in fitur_mentah if f.startswith("mean")]),
+                (t_err, [f for f in fitur_mentah if f.endswith("error")]),
+                (t_worst, [f for f in fitur_mentah if f.startswith("worst")]),
             ]
             for tab_aktif, daftar_f in kelompok_fitur:
                 with tab_aktif:
@@ -75,7 +76,7 @@ def main():
                                 f_nama, value=float(nilai_default[f_nama]), format="%.5f"
                             )
 
-            tombol_prediksi = st.form_submit_button("ቄ Prediksi Diagnosis", type="primary")
+            tombol_prediksi = st.form_submit_button(" Prediksi Diagnosis", type="primary")
 
         if tombol_prediksi:
             df_input = pd.DataFrame([input_user])[fitur_mentah]
@@ -87,9 +88,9 @@ def main():
             col_hasil, col_p1, col_p2 = st.columns([2, 1, 1])
             with col_hasil:
                 if hasil_kelas == 1:
-                    st.error("### ኙ Hasil Prediksi: GANAS (Malignant)")
+                    st.error("### Hasil Prediksi: GANAS (Malignant)")
                 else:
-                    st.success("### ቅ Hasil Prediksi: JINAK (Benign)")
+                    st.success("### Hasil Prediksi: JINAK (Benign)")
             col_p1.metric("Probabilitas Ganas", f"{prob_ganas*100:.2f}%")
             col_p2.metric("Probabilitas Jinak", f"{prob_jinak*100:.2f}%")
             st.progress(prob_ganas, text=f"Skor Probabilitas Keganasan: {prob_ganas*100:.2f}%")
