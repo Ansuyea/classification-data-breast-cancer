@@ -48,8 +48,10 @@
 ---
 
 ## 5. Implementasi Aplikasi Web Streamlit
-* Model terbaik disimpan ke `models/model_kasus02.joblib`.
-* Aplikasi web interaktif dibangun menggunakan **Streamlit** untuk mempermudah:
-  1. Menampilkan performa model, riwayat CV, dan Confusion Matrix di panel samping.
-  2. Input manual fitur lab pasien secara instan.
-  3. Unggah file CSV untuk prediksi klinis massal.
+<img width="968" height="596" alt="image" src="https://github.com/user-attachments/assets/cf54eaf2-3ccf-4d62-96bd-b8cc1291a004" />
+
+<img width="459" height="326" alt="image" src="https://github.com/user-attachments/assets/d8764d13-e2ba-4c3b-b063-6231db8cc8bf" />
+
+<img width="469" height="333" alt="image" src="https://github.com/user-attachments/assets/4e84ff8f-299d-47ed-b5e5-c8f87663621a" />
+
+
