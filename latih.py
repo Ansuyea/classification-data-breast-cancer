@@ -1,3 +1,4 @@
+%%writefile latih.py
 from pathlib import Path
 import joblib
 import pandas as pd
@@ -125,4 +126,14 @@ def main():
         "fitur_mentah": X.columns.tolist(),
         "nilai_median_default": X_train.median().to_dict(),
         "kolom_dibuang_korelasi": tahap_fe.kolom_dibuang_,
-        
+        "fitur_terpilih": tahap_fe.fitur_terpilih_,
+        "metrik_test": metrik_test,
+        "hasil_cv": hasil_cv,
+    }
+
+    joblib.dump(paket_deploy, path_output_model)
+    print(f"\nPipeline model berhasil dideploy ke: {path_output_model}")
+
+
+if __name__ == "__main__":
+    main()
